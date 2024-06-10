@@ -286,6 +286,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, amount, false)
         end
 
+        -- Added Code (highqez_cashitem)
+        if self and self.PlayerData and self.PlayerData.source then
+            TriggerEvent('highqez_cashitem:server:AddMoney', self.PlayerData.source, moneytype, amount, self.PlayerData.money[moneytype], reason)
+        end
+
         return true
     end
 
@@ -318,6 +323,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
             end
         end
 
+        -- Added Code (highqez_cashitem)
+        if self and self.PlayerData and self.PlayerData.source then
+            TriggerEvent('highqez_cashitem:server:RemoveMoney', self.PlayerData.source, moneytype, amount, self.PlayerData.money[moneytype], reason)
+        end
+
         return true
     end
 
@@ -332,6 +342,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
         if not self.Offline then
             self.Functions.UpdatePlayerData()
             TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'SetMoney', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') set, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
+        end
+
+        -- Added Code (highqez_cashitem)
+        if self and self.PlayerData and self.PlayerData.source then
+            TriggerEvent('highqez_cashitem:server:SetMoney', self.PlayerData.source, moneytype, amount, reason)
         end
 
         return true
@@ -367,6 +382,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                     TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
                 end
 
+                -- Added Code (highqez_cashitem)
+                if self and self.PlayerData and self.PlayerData.source then
+                    TriggerEvent('highqez_cashitem:server:AddItem', self.PlayerData.source, item, amount)
+                end
+
                 return true
             elseif not itemInfo['unique'] and slot or slot and self.PlayerData.items[slot] == nil then
                 self.PlayerData.items[slot] = { name = itemInfo['name'], amount = amount, info = info or '', label = itemInfo['label'], description = itemInfo['description'] or '', weight = itemInfo['weight'], type = itemInfo['type'], unique = itemInfo['unique'], useable = itemInfo['useable'], image = itemInfo['image'], shouldClose = itemInfo['shouldClose'], slot = slot, combinable = itemInfo['combinable'] }
@@ -374,6 +394,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                 if not self.Offline then
                     self.Functions.UpdatePlayerData()
                     TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
+                end
+
+                -- Added Code (highqez_cashitem)
+                if self and self.PlayerData and self.PlayerData.source then
+                    TriggerEvent('highqez_cashitem:server:AddItem', self.PlayerData.source, item, amount)
                 end
 
                 return true
@@ -385,6 +410,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                         if not self.Offline then
                             self.Functions.UpdatePlayerData()
                             TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'AddItem', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** got item: [slot:' .. i .. '], itemname: ' .. self.PlayerData.items[i].name .. ', added amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[i].amount)
+                        end
+
+                        -- Added Code (highqez_cashitem)
+                        if self and self.PlayerData and self.PlayerData.source then
+                            TriggerEvent('highqez_cashitem:server:AddItem', self.PlayerData.source, item, amount)
                         end
 
                         return true
@@ -410,6 +440,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                     TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. self.PlayerData.items[slot].name .. ', removed amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[slot].amount)
                 end
 
+                -- Added Code (highqez_cashitem)
+                if self and self.PlayerData and self.PlayerData.source then
+                    TriggerEvent('highqez_cashitem:server:RemoveItem', self.PlayerData.source, item, amount)
+                end
+
                 return true
             elseif self.PlayerData.items[slot].amount == amount then
                 self.PlayerData.items[slot] = nil
@@ -417,6 +452,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                 if not self.Offline then
                     self.Functions.UpdatePlayerData()
                     TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
+                end
+
+                -- Added Code (highqez_cashitem)
+                if self and self.PlayerData and self.PlayerData.source then
+                    TriggerEvent('highqez_cashitem:server:RemoveItem', self.PlayerData.source, item, amount)
                 end
 
                 return true
@@ -434,6 +474,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                             TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. _slot .. '], itemname: ' .. self.PlayerData.items[_slot].name .. ', removed amount: ' .. amount .. ', new total amount: ' .. self.PlayerData.items[_slot].amount)
                         end
 
+                        -- Added Code (highqez_cashitem)
+                        if self and self.PlayerData and self.PlayerData.source then
+                            TriggerEvent('highqez_cashitem:server:RemoveItem', self.PlayerData.source, item, amount)
+                        end
+
                         return true
                     elseif self.PlayerData.items[_slot].amount == amountToRemove then
                         self.PlayerData.items[_slot] = nil
@@ -441,6 +486,11 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
                         if not self.Offline then
                             self.Functions.UpdatePlayerData()
                             TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'RemoveItem', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** lost item: [slot:' .. _slot .. '], itemname: ' .. item .. ', removed amount: ' .. amount .. ', item removed')
+                        end
+
+                        -- Added Code (highqez_cashitem)
+                        if self and self.PlayerData and self.PlayerData.source then
+                            TriggerEvent('highqez_cashitem:server:RemoveItem', self.PlayerData.source, item, amount)
                         end
 
                         return true
@@ -467,6 +517,12 @@ function QBCore.Player.CreatePlayer(PlayerData, Offline)
             self.Functions.UpdatePlayerData()
             TriggerEvent('qb-log:server:CreateLog', 'playerinventory', 'ClearInventory', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** inventory cleared')
         end
+
+        -- Added Code (highqez_cashitem)
+        if self and self.PlayerData and self.PlayerData.source then
+            TriggerEvent('highqez_cashitem:server:ClearInventory', self.PlayerData.source)
+        end
+        
     end
 
     function self.Functions.GetItemByName(item)
